@@ -2,12 +2,19 @@ import { useMemo, useState } from "react";
 import type { Disease, Field } from "../config/diseases";
 import { predict, type Prediction } from "../lib/predict";
 import NumberField from "./NumberField";
+import Select from "./Select";
 import ResultCard from "./ResultCard";
 
 type Values = Record<string, string>;
 const empty = (d: Disease): Values => Object.fromEntries(d.fields.map((f) => [f.key, ""]));
 const fromRow = (d: Disease, row: number[]): Values =>
   Object.fromEntries(d.fields.map((f, i) => [f.key, String(row[i])]));
+
+/** Plain <div> for dropdowns/toggles (a <label> would re-trigger the dropdown button on every click). */
+function CellTag({ f, invalid, children }: { f: Field; invalid: boolean; children: React.ReactNode }) {
+  const cls = invalid ? "cell invalid" : "cell";
+  return f.options ? <div className={cls} title={f.hint}>{children}</div> : <label className={cls} title={f.hint}>{children}</label>;
+}
 
 export default function PredictionForm({ disease }: { disease: Disease }) {
   const [values, setValues] = useState<Values>(() => empty(disease));
@@ -74,14 +81,7 @@ export default function PredictionForm({ disease }: { disease: Disease }) {
         </div>
       );
     }
-    if (f.options) {
-      return (
-        <select value={values[f.key]} aria-label={f.label} onChange={(e) => set(f.key, e.target.value)}>
-          <option value="" disabled>Select</option>
-          {f.options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-        </select>
-      );
-    }
+    if (f.options) return <Select options={f.options} value={values[f.key]} label={f.label} onChange={(v) => set(f.key, v)} />;
     const s = disease.model.stats[f.key];
     return (
       <span className="num-wrap">
@@ -107,10 +107,10 @@ export default function PredictionForm({ disease }: { disease: Disease }) {
               {g.name && <span className="mono group-name">{g.name}</span>}
               <div className="cells">
                 {g.fields.map((f) => (
-                  <label key={f.key} className={invalid.has(f.key) ? "cell invalid" : "cell"} title={f.hint}>
+                  <CellTag key={f.key} f={f} invalid={invalid.has(f.key)}>
                     <span className="lbl">{f.label}</span>
                     {control(f)}
-                  </label>
+                  </CellTag>
                 ))}
               </div>
             </div>

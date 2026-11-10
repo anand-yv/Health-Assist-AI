@@ -80,6 +80,8 @@ def build(key, spec):
         "stats": {c: {"min": float(X[c].min()), "max": float(X[c].max()),
                       "mean": float(X[c].mean()), "std": float(X[c].std())} for c in X.columns},
         "examples": examples,
+        # Every real patient's score (w.x + b) and true label, for the result chart.
+        "scores": [[round(float(v), 3), int(c)] for v, c in zip(X.values @ w + b, y.values)],
     }
 
 

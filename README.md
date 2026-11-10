@@ -3,6 +3,8 @@
 Machine-learning risk screening for **diabetes**, **heart disease** and **Parkinson's disease** — a React app that runs
 the trained models **entirely in the browser**. No backend, no database, no data collection.
 
+🌐 **Live site: https://anand-yv.github.io/Health-Assist-AI/**
+
 > Educational demo only — not medical advice.
 
 ## Why there is no backend
@@ -35,4 +37,4 @@ Retrain / re-export models (optional): `pip install -r ml/requirements.txt && py
 
 ## Deploy (free)
 - **Vercel / Netlify / Cloudflare Pages:** root directory `web`, build `npm run build`, output `dist`.
-- **GitHub Pages:** push to `main`; enable *Settings → Pages → Source: GitHub Actions* (workflow included).
+- **GitHub Pages (used for the live site):** push to `main`; enable *Settings → Pages → Source: GitHub Actions* (workflow included).

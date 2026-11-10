@@ -1,5 +1,6 @@
 import type { Disease } from "../config/diseases";
 import type { Prediction } from "../lib/predict";
+import ScoreChart from "./ScoreChart";
 
 export default function ResultCard({ disease, result }: { disease: Disease; result: Prediction }) {
   const top = result.contributions.slice(0, 5);
@@ -18,6 +19,8 @@ export default function ResultCard({ disease, result }: { disease: Disease; resu
           ? `Probability ${(result.probability * 100).toFixed(1)}%`
           : `Score ${result.score >= 0 ? "+" : ""}${result.score.toFixed(2)} · above 0 = positive`}
       </p>
+
+      {disease.model.scores && <ScoreChart scores={disease.model.scores} you={result.score} />}
 
       <span className="mono cap drivers">Biggest drivers vs. average patient</span>
       <ul className="bars">

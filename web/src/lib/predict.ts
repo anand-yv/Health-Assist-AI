@@ -3,6 +3,7 @@ export interface LinearModel {
   weights: number[];
   intercept: number;
   kind: "svm" | "logistic";
+  scores?: [number, number][]; // [score, true label] for every training patient
   stats: Record<string, { min: number; max: number; mean: number; std: number }>;
 }
 
